@@ -4,16 +4,30 @@
 
 #include "CoreMinimal.h"
 #include "ChatPluginDefinitions.h"
-#include "UObject/Object.h"
+#include "Blueprint/UserWidget.h"
+#include "Components/ComboBoxString.h"
+#include "Components/EditableTextBox.h"
 #include "ChatBoxWidget.generated.h"
 
 /**
  *
  */
 UCLASS()
-class MULTIPLAYERCHATPLUGIN_API UChatBoxWidget : public UObject
+class MULTIPLAYERCHATPLUGIN_API UChatBoxWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
+protected:
+	UPROPERTY(BlueprintReadWrite)
+	UEditableTextBox* TextBox = nullptr;
+
+	UPROPERTY(BlueprintReadWrite)
+	UComboBoxString* ChatSelection = nullptr;
+
+	UFUNCTION(BlueprintCallable)
+	void HandleTextEnter();
+
+
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)

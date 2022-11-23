@@ -26,7 +26,7 @@ public:
 
 	//helper function that display a message in yellow with DEBUG - in front of it
 	UFUNCTION(BlueprintCallable, Category="Chat")
-	static void AddChatDebugData(APlayerController* PC,  EChatColor Color, EMessageCategories Category, const FString & Message);
+	static void AddChatDebugData(APlayerController* PC, EMessageCategories Category, const FString & Message);
 
 	//Try to add chat data from a player Controller
 	UFUNCTION(BlueprintCallable, Category="Chat")

@@ -33,7 +33,7 @@ void UChatUtilities::AddChatData(APlayerController* PC, EChatColor Color, EMessa
                                  const FString& Message)
 {
 	if (IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(PC))
-		ChatInterface->AddChatData(Color, Category, Message);
+		ChatInterface->Client_AddChatData(Color, Category, Message);
 }
 
 void UChatUtilities::AddChatDataFromAvatar(ACharacter* Character, EChatColor Color, EMessageCategories Category,
@@ -43,7 +43,7 @@ void UChatUtilities::AddChatDataFromAvatar(ACharacter* Character, EChatColor Col
 		AddChatData(PC, Color, Category, Message);
 }
 
-void UChatUtilities::AddChatDebugData(APlayerController* PC, EChatColor Color, EMessageCategories Category,
+void UChatUtilities::AddChatDebugData(APlayerController* PC, EMessageCategories Category,
                                       const FString& Message)
 {
 	AddChatData(PC, EChatColor::Yellow, Category, "Debug - " + Message);

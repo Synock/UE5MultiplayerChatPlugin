@@ -15,9 +15,8 @@ class UHUDChatInterface : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- *
- */
+//interface to the main HUD/UI
+//Typically that's where you would override functions if you want multiple chat windows
 class MULTIPLAYERCHATPLUGIN_API IHUDChatInterface
 {
 	GENERATED_BODY()

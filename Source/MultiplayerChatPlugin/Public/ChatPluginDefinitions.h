@@ -49,8 +49,11 @@ USTRUCT(BlueprintType)
 struct FMessageMetaData
 {
 	GENERATED_BODY()
+	UPROPERTY(BlueprintReadWrite)
 	EChatColor Color = EChatColor::Unknown;
+	UPROPERTY(BlueprintReadWrite)
 	EMessageCategories Category = EMessageCategories::Unknown;
+	UPROPERTY(BlueprintReadWrite)
 	EMessageReach Reach = EMessageReach::Unknown;
 };
 

@@ -6,7 +6,7 @@
 
 // Add default functionality here for any IPlayerChatInterface functions that are not pure virtual.
 
-void IPlayerChatInterface::AddChatData_Implementation(EChatColor Color, EMessageCategories Category, const FString& Message)
+void IPlayerChatInterface::AddChatData(EChatColor Color, EMessageCategories Category, const FString& Message)
 {
 	if(IHUDChatInterface* ChatHUD = GetChatHUD())
 	{
@@ -14,7 +14,7 @@ void IPlayerChatInterface::AddChatData_Implementation(EChatColor Color, EMessage
 	}
 }
 
-void IPlayerChatInterface::AddChatDataType_Implementation(EGlobalMessageType Type, const FString& Message)
+void IPlayerChatInterface::AddChatDataType(EGlobalMessageType Type, const FString& Message)
 {
 	if(IHUDChatInterface* ChatHUD = GetChatHUD())
 	{
