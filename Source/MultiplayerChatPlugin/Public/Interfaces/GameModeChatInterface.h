@@ -22,4 +22,8 @@ class MULTIPLAYERCHATPLUGIN_API IGameModeChatInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+
+	UFUNCTION()
+	virtual void AreaSpeak(APlayerController* PlayerController, const FString& Message, float Range = 500.) = 0;
+
 };
