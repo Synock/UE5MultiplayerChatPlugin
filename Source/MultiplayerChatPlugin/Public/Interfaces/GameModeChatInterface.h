@@ -7,7 +7,7 @@
 #include "GameModeChatInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE()
+UINTERFACE(MinimalAPI, NotBlueprintable)
 class UGameModeChatInterface : public UInterface
 {
 	GENERATED_BODY()
