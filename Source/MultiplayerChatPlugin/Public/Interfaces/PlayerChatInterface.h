@@ -42,6 +42,9 @@ public:
 	 */
 	virtual void Client_AddChatDataType(EGlobalMessageType Type, const FString& Message) = 0;
 
+	//return the ingame chat name of a player
+	UFUNCTION(BlueprintCallable, Category = "Chat|Display")
+	virtual FString GetChatName() const = 0;
 
 	UFUNCTION(BlueprintCallable, Category = "Chat|Display")
 	virtual void AddChatData(EChatColor Color, EMessageCategories Category, const FString& Message);
@@ -49,14 +52,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Chat|Display")
 	virtual void AddChatDataType(EGlobalMessageType Type, const FString& Message);
 
-	UFUNCTION(BlueprintCallable, Category = "Chat|Talk")
-	virtual void AreaSpeak(const FString& Message, float Range = 500.);
-
 	//this is the function that display the message of the speaker to itself.
 	// You said "..." , You tell someone "..."
 	UFUNCTION(BlueprintCallable, Category = "Chat|Talk")
 	virtual void SelfHearingSpeak(EGlobalMessageType Type, const FString& Message);
 
+	//Client callable version
+	UFUNCTION(BlueprintCallable, Category = "Chat|Talk")
+	virtual void AreaSpeak(const FString& Message, float Range = 500.);
 	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
 	/*void AMainPlayerController::Server_AreaSpeak_Implementation(const FString& Message, float Range)
 		{
@@ -66,5 +69,29 @@ public:
 	 **/
 	virtual void Server_AreaSpeak(const FString& Message, float Range) = 0;
 
+	//Client callable version
+	UFUNCTION(BlueprintCallable, Category = "Chat|Talk")
+	virtual void ShoutSpeak(const FString& Message);
 
+	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
+	/*void AMainPlayerController::Server_ShoutSpeak_Implementation(const FString& Message)
+		{
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+				GameModeChat->ShoutSpeak(this, Message);
+		}
+	 **/
+	virtual void Server_ShoutSpeak(const FString& Message) = 0;
+
+	//Client callable version
+	UFUNCTION(BlueprintCallable, Category = "Chat|Talk")
+	virtual void OOCSpeak(const FString& Message);
+
+	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
+	/*void AMainPlayerController::Server_OOCSpeak_Implementation(const FString& Message)
+		{
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+				GameModeChat->OOCSpeak(this, Message);
+		}
+	 **/
+	virtual void Server_OOCSpeak(const FString& Message) = 0;
 };

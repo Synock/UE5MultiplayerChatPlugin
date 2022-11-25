@@ -9,6 +9,7 @@ void UChatBoxWidget::HandleTextEnter()
 {
 	FString InputString = TextBox->GetText().ToString();
 
+	TextBox->SetText(FText::GetEmpty());
 
 	if (InputString[0] == '/')
 	{
@@ -19,7 +20,7 @@ void UChatBoxWidget::HandleTextEnter()
 
 	if(const FString SelectedOption = ChatSelection->GetSelectedOption(); SelectedOption == "Say")
 	{
-
+		PlayerChatInterface->AreaSpeak(InputString, 1500.f);
 	}
 	else if(SelectedOption == "Group")
 	{
@@ -27,7 +28,7 @@ void UChatBoxWidget::HandleTextEnter()
 	}
 	else if(SelectedOption == "Shout")
 	{
-
+		PlayerChatInterface->ShoutSpeak(InputString);
 	}
 	else if(SelectedOption == "Raid")
 	{
@@ -35,7 +36,7 @@ void UChatBoxWidget::HandleTextEnter()
 	}
 	else if(SelectedOption == "OOC")
 	{
-
+		PlayerChatInterface->OOCSpeak(InputString);
 	}
 	else if(SelectedOption == "Tell")
 	{

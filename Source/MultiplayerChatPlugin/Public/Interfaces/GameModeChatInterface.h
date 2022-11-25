@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "GameModeChatInterface.generated.h"
 
 // This class does not need to be modified.
@@ -24,6 +25,9 @@ class MULTIPLAYERCHATPLUGIN_API IGameModeChatInterface
 public:
 
 	UFUNCTION()
-	virtual void AreaSpeak(APlayerController* PlayerController, const FString& Message, float Range = 500.) = 0;
+	virtual void AreaSpeak(APlayerController* PlayerController, const FString& Message, float Range = 500.);
 
+	virtual void ShoutSpeak(APlayerController* PlayerController, const FString& String);
+
+	virtual void OOCSpeak(APlayerController* PlayerController, const FString& String);
 };
