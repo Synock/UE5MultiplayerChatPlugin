@@ -11,38 +11,56 @@ void UChatBoxWidget::HandleTextEnter()
 
 	TextBox->SetText(FText::GetEmpty());
 
-	if (InputString[0] == '/')
-	{
-		//figure out commandline
-	}
-
 	IPlayerChatInterface* PlayerChatInterface = Cast<IPlayerChatInterface>(GetOwningPlayer());
 
-	if(const FString SelectedOption = ChatSelection->GetSelectedOption(); SelectedOption == "Say")
+	if (InputString[0] == '/')
+	{
+		FString Command;
+		FString Arguments;
+		InputString.Split(" ", &Command, &Arguments, ESearchCase::IgnoreCase, ESearchDir::FromStart);
+
+		Command = Command.RightChop(1);
+
+		if (Command.Equals("Tell", ESearchCase::IgnoreCase))
+		{
+			FString TargetName;
+			FString Message;
+			Arguments.Split(" ", &TargetName, &Message, ESearchCase::IgnoreCase, ESearchDir::FromStart);
+			PlayerChatInterface->TellSpeak(TargetName, Message);
+		}
+		else
+		{
+			PlayerChatInterface->ProcessCommands(Command, Arguments);
+		}
+
+		return;
+	}
+
+	if (const FString SelectedOption = ChatSelection->GetSelectedOption(); SelectedOption == "Say")
 	{
 		PlayerChatInterface->AreaSpeak(InputString, 1500.f);
 	}
-	else if(SelectedOption == "Group")
+	else if (SelectedOption == "Group")
 	{
 		PlayerChatInterface->GroupSpeak(InputString);
 	}
-	else if(SelectedOption == "Shout")
+	else if (SelectedOption == "Shout")
 	{
 		PlayerChatInterface->ShoutSpeak(InputString);
 	}
-	else if(SelectedOption == "Raid")
+	else if (SelectedOption == "Raid")
 	{
 		PlayerChatInterface->RaidSpeak(InputString);
 	}
-	else if(SelectedOption == "Guild")
+	else if (SelectedOption == "Guild")
 	{
 		PlayerChatInterface->GuildSpeak(InputString);
 	}
-	else if(SelectedOption == "OOC")
+	else if (SelectedOption == "OOC")
 	{
 		PlayerChatInterface->OOCSpeak(InputString);
 	}
-	else if(SelectedOption == "Auction")
+	else if (SelectedOption == "Auction")
 	{
 		PlayerChatInterface->AuctionSpeak(InputString);
 	}

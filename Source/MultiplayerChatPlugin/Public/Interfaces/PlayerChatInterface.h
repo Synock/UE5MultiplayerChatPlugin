@@ -25,6 +25,9 @@ public:
 
 	virtual IHUDChatInterface* GetChatHUD() = 0;
 
+
+	virtual void ProcessCommands(const FString& Command, const FString& Arguments);
+
 	//this functions ensure it is run on the client, you'll have to redefine it at least by copying the following code
 	//UFUNCTION(Client, unreliable, Category = "Chat|Display")
 	/* virtual void Client_AddChatData_Implementation(EChatColor Color, EMessageCategories Category, const FString& Message)

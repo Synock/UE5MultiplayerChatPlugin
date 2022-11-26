@@ -6,6 +6,13 @@
 
 // Add default functionality here for any IPlayerChatInterface functions that are not pure virtual.
 
+void IPlayerChatInterface::ProcessCommands(const FString& Command, const FString& Arguments)
+{
+	//Do something about the commands
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
 void IPlayerChatInterface::AddChatData(EChatColor Color, EMessageCategories Category, const FString& Message)
 {
 	if (IHUDChatInterface* ChatHUD = GetChatHUD())
@@ -104,7 +111,7 @@ void IPlayerChatInterface::TellSpeak(const FString& TargetName, const FString& M
 	}
 
 	//this is displayed without any check, is it Legit?
-	SelfHearingSpeak(EGlobalMessageType::Group, Message);
+	SelfHearingSpeak(EGlobalMessageType::Tell, Message, TargetName);
 	Server_TellSpeak(TargetName, Message);
 }
 
