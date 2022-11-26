@@ -14,6 +14,8 @@ void IPlayerChatInterface::AddChatData(EChatColor Color, EMessageCategories Cate
 	}
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+
 void IPlayerChatInterface::AddChatDataType(EGlobalMessageType Type, const FString& Message)
 {
 	if (IHUDChatInterface* ChatHUD = GetChatHUD())
@@ -22,12 +24,16 @@ void IPlayerChatInterface::AddChatDataType(EGlobalMessageType Type, const FStrin
 	}
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+
 void IPlayerChatInterface::AreaSpeak(const FString& Message, float Range)
 {
 	SelfHearingSpeak(EGlobalMessageType::Say, Message);
 
 	Server_AreaSpeak(Message,Range);
 }
+
+//----------------------------------------------------------------------------------------------------------------------
 
 void IPlayerChatInterface::ShoutSpeak(const FString& Message)
 {
@@ -36,12 +42,38 @@ void IPlayerChatInterface::ShoutSpeak(const FString& Message)
 	Server_ShoutSpeak(Message);
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+
 void IPlayerChatInterface::OOCSpeak(const FString& Message)
 {
 	SelfHearingSpeak(EGlobalMessageType::OOC, Message);
 
 	Server_OOCSpeak(Message);
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+
+bool IPlayerChatInterface::IsInGroup() const
+{
+	return false;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void IPlayerChatInterface::GroupSpeak(const FString& Message)
+{
+	if(!IsInGroup())
+	{
+		AddChatData(EChatColor::White,  EMessageCategories::Chat, "You are not in a group. Talking to yourself again???");
+		return;
+	}
+
+	SelfHearingSpeak(EGlobalMessageType::Group, Message);
+
+	Server_GroupSpeak(Message);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 
 void IPlayerChatInterface::SelfHearingSpeak(EGlobalMessageType Type, const FString& Message)
 {

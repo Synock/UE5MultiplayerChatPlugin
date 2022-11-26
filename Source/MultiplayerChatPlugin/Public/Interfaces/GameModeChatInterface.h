@@ -27,7 +27,23 @@ public:
 	UFUNCTION()
 	virtual void AreaSpeak(APlayerController* PlayerController, const FString& Message, float Range = 500.);
 
+	UFUNCTION()
 	virtual void ShoutSpeak(APlayerController* PlayerController, const FString& String);
 
+	UFUNCTION()
 	virtual void OOCSpeak(APlayerController* PlayerController, const FString& String);
+
+	UFUNCTION()
+	virtual void GroupSpeak(APlayerController* PlayerController, const FString& String);
+
+	/**
+	 * @brief return the list of APlayerController that belong to the same Group as PlayerController
+	 * by default it will return nothing
+	 * @param PlayerController the APlayerController to get the group info from
+	 * @return the list of APlayerController that belong to the same Group as PlayerController
+	 */
+	UFUNCTION()
+	virtual TArray<APlayerController*> GetGroupMembers(APlayerController* PlayerController);
+
+
 };

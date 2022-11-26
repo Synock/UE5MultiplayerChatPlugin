@@ -24,7 +24,7 @@ void UChatBoxWidget::HandleTextEnter()
 	}
 	else if(SelectedOption == "Group")
 	{
-
+		PlayerChatInterface->GroupSpeak(InputString);
 	}
 	else if(SelectedOption == "Shout")
 	{

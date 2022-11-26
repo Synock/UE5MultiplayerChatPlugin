@@ -94,4 +94,20 @@ public:
 		}
 	 **/
 	virtual void Server_OOCSpeak(const FString& Message) = 0;
+
+
+	UFUNCTION(BlueprintCallable, Category = "Chat")
+	virtual bool IsInGroup() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Chat|Talk")
+	virtual void GroupSpeak(const FString& Message);
+
+	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
+	/*void AMainPlayerController::Server_GroupSpeak_Implementation(const FString& Message)
+		{
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+				GameModeChat->GroupSpeak(this, Message);
+		}
+	 **/
+	virtual void Server_GroupSpeak(const FString& Message) = 0;
 };

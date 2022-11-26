@@ -29,12 +29,16 @@ FMessageMetaData UChatUtilities::GetMessageMetaFromType(EGlobalMessageType Type)
 	}
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+
 void UChatUtilities::AddChatData(APlayerController* PC, EChatColor Color, EMessageCategories Category,
                                  const FString& Message)
 {
 	if (IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(PC))
 		ChatInterface->Client_AddChatData(Color, Category, Message);
 }
+
+//----------------------------------------------------------------------------------------------------------------------
 
 void UChatUtilities::AddChatDataFromAvatar(ACharacter* Character, EChatColor Color, EMessageCategories Category,
                                            const FString& Message)
@@ -43,17 +47,23 @@ void UChatUtilities::AddChatDataFromAvatar(ACharacter* Character, EChatColor Col
 		AddChatData(PC, Color, Category, Message);
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+
 void UChatUtilities::AddChatDebugData(APlayerController* PC, EMessageCategories Category,
                                       const FString& Message)
 {
 	AddChatData(PC, EChatColor::Yellow, Category, "Debug - " + Message);
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+
 void UChatUtilities::AddChatDataType(APlayerController* PC, EGlobalMessageType Type, const FString& Message)
 {
 	FMessageMetaData Data = GetMessageMetaFromType(Type);
 	AddChatData(PC, Data.Color, Data.Category, Message);
 }
+
+//----------------------------------------------------------------------------------------------------------------------
 
 void UChatUtilities::AddChatDataTypeFromAvatar(ACharacter* Character, EGlobalMessageType Type, const FString& Message)
 {
