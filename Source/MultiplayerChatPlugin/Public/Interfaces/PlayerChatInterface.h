@@ -55,7 +55,7 @@ public:
 	//this is the function that display the message of the speaker to itself.
 	// You said "..." , You tell someone "..."
 	UFUNCTION(BlueprintCallable, Category = "Chat|Talk")
-	virtual void SelfHearingSpeak(EGlobalMessageType Type, const FString& Message);
+	virtual void SelfHearingSpeak(EGlobalMessageType Type, const FString& Message, const FString& Target = "");
 
 	//Client callable version
 	UFUNCTION(BlueprintCallable, Category = "Chat|Talk")
@@ -95,9 +95,26 @@ public:
 	 **/
 	virtual void Server_OOCSpeak(const FString& Message) = 0;
 
+	void AuctionSpeak(const FString& Message);
+
+	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
+	/*void AMainPlayerController::Server_AuctionSpeak_Implementation(const FString& Message)
+		{
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+				GameModeChat->AuctionSpeak(this, Message);
+		}
+	 **/
+	virtual void Server_AuctionSpeak(const FString& Message) = 0;
+
 
 	UFUNCTION(BlueprintCallable, Category = "Chat")
 	virtual bool IsInGroup() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Chat")
+	virtual bool IsInRaid() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Chat")
+	virtual bool IsInGuild() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Chat|Talk")
 	virtual void GroupSpeak(const FString& Message);
@@ -110,4 +127,41 @@ public:
 		}
 	 **/
 	virtual void Server_GroupSpeak(const FString& Message) = 0;
+
+	UFUNCTION(BlueprintCallable, Category = "Chat|Talk")
+	virtual void TellSpeak(const FString& TargetName, const FString& Message);
+
+	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
+	/*void AMainPlayerController::Server_TellSpeak_Implementation(const FString& TargetName, const FString& Message)
+		{
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+				GameModeChat->TellSpeak(this, TargetName, Message);
+		}
+	 **/
+	virtual void Server_TellSpeak(const FString& TargetName, const FString& Message) = 0;
+
+
+	void RaidSpeak(const FString& Message);
+
+	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
+	/*void AMainPlayerController::Server_RaidSpeak_Implementation(const FString& Message)
+		{
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+				GameModeChat->RaidSpeak(this, Message);
+		}
+	 **/
+	virtual void Server_RaidSpeak(const FString& Message) = 0;
+
+
+	void GuildSpeak(const FString& Message);
+
+	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
+	/*void AMainPlayerController::Server_GuildSpeak_Implementation(const FString& Message)
+		{
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+				GameModeChat->GuildSpeak(this, Message);
+		}
+	 **/
+	virtual void Server_GuildSpeak(const FString& Message) = 0;
+
 };

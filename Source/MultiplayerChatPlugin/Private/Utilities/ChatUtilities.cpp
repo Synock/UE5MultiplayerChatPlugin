@@ -19,6 +19,8 @@ FMessageMetaData UChatUtilities::GetMessageMetaFromType(EGlobalMessageType Type)
 	case EGlobalMessageType::Shout:return {EChatColor::Red, EMessageCategories::Chat, EMessageReach::Server};
 	case EGlobalMessageType::OOC:return {EChatColor::DarkGreen, EMessageCategories::Chat, EMessageReach::Server};
 	case EGlobalMessageType::Tell:return {EChatColor::Purple, EMessageCategories::Chat, EMessageReach::External};
+	case EGlobalMessageType::Guild:return {EChatColor::Green, EMessageCategories::Chat, EMessageReach::External};
+	case EGlobalMessageType::Auction:return {EChatColor::Green, EMessageCategories::Chat, EMessageReach::Server};
 	case EGlobalMessageType::CombatDamageGiven:return {EChatColor::White, EMessageCategories::Combat, EMessageReach::Area};
 	case EGlobalMessageType::CombatDamageReceived:return {EChatColor::Red, EMessageCategories::Combat, EMessageReach::Local};
 	case EGlobalMessageType::CombatDamageOther:return {EChatColor::White, EMessageCategories::Combat, EMessageReach::Area};

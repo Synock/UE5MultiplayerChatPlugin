@@ -29,8 +29,7 @@ void IPlayerChatInterface::AddChatDataType(EGlobalMessageType Type, const FStrin
 void IPlayerChatInterface::AreaSpeak(const FString& Message, float Range)
 {
 	SelfHearingSpeak(EGlobalMessageType::Say, Message);
-
-	Server_AreaSpeak(Message,Range);
+	Server_AreaSpeak(Message, Range);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -38,7 +37,6 @@ void IPlayerChatInterface::AreaSpeak(const FString& Message, float Range)
 void IPlayerChatInterface::ShoutSpeak(const FString& Message)
 {
 	SelfHearingSpeak(EGlobalMessageType::Shout, Message);
-
 	Server_ShoutSpeak(Message);
 }
 
@@ -47,8 +45,15 @@ void IPlayerChatInterface::ShoutSpeak(const FString& Message)
 void IPlayerChatInterface::OOCSpeak(const FString& Message)
 {
 	SelfHearingSpeak(EGlobalMessageType::OOC, Message);
-
 	Server_OOCSpeak(Message);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void IPlayerChatInterface::AuctionSpeak(const FString& Message)
+{
+	SelfHearingSpeak(EGlobalMessageType::Auction, Message);
+	Server_AuctionSpeak(Message);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -60,11 +65,26 @@ bool IPlayerChatInterface::IsInGroup() const
 
 //----------------------------------------------------------------------------------------------------------------------
 
+bool IPlayerChatInterface::IsInRaid() const
+{
+	return false;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+bool IPlayerChatInterface::IsInGuild() const
+{
+	return false;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
 void IPlayerChatInterface::GroupSpeak(const FString& Message)
 {
-	if(!IsInGroup())
+	if (!IsInGroup())
 	{
-		AddChatData(EChatColor::White,  EMessageCategories::Chat, "You are not in a group. Talking to yourself again???");
+		AddChatData(EChatColor::White, EMessageCategories::Chat,
+		            "You are not in a group. Talking to yourself again???");
 		return;
 	}
 
@@ -75,7 +95,52 @@ void IPlayerChatInterface::GroupSpeak(const FString& Message)
 
 //----------------------------------------------------------------------------------------------------------------------
 
-void IPlayerChatInterface::SelfHearingSpeak(EGlobalMessageType Type, const FString& Message)
+void IPlayerChatInterface::TellSpeak(const FString& TargetName, const FString& Message)
+{
+	if (TargetName == GetChatName())
+	{
+		AddChatData(EChatColor::White, EMessageCategories::Chat, "Talking to yourself again?");
+		return;
+	}
+
+	//this is displayed without any check, is it Legit?
+	SelfHearingSpeak(EGlobalMessageType::Group, Message);
+	Server_TellSpeak(TargetName, Message);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void IPlayerChatInterface::RaidSpeak(const FString& Message)
+{
+	if (!IsInGroup() || !IsInRaid())
+	{
+		AddChatData(EChatColor::White, EMessageCategories::Chat,
+		            "You are not in a raid party.");
+		return;
+	}
+
+	SelfHearingSpeak(EGlobalMessageType::Raid, Message);
+	Server_RaidSpeak(Message);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void IPlayerChatInterface::GuildSpeak(const FString& Message)
+{
+	if (!IsInGuild())
+	{
+		AddChatData(EChatColor::White, EMessageCategories::Chat,
+		            "You are not a member of any guild.");
+		return;
+	}
+
+	SelfHearingSpeak(EGlobalMessageType::Guild, Message);
+	Server_GuildSpeak(Message);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void IPlayerChatInterface::SelfHearingSpeak(EGlobalMessageType Type, const FString& Message, const FString& Target)
 {
 	const EChatColor Color = EChatColor::White;
 
@@ -85,13 +150,19 @@ void IPlayerChatInterface::SelfHearingSpeak(EGlobalMessageType Type, const FStri
 	default:
 	case EGlobalMessageType::Unknown: break;
 	case EGlobalMessageType::Say:
-		AddChatData(Color,  EMessageCategories::Chat, "You say, " + ReworkedMessage);
+		AddChatData(Color, EMessageCategories::Chat, "You say, " + ReworkedMessage);
 		break;
 	case EGlobalMessageType::Group:
 		AddChatData(Color, EMessageCategories::Chat, "You tell your party, " + ReworkedMessage);
 		break;
+	case EGlobalMessageType::Guild:
+		AddChatData(Color, EMessageCategories::Chat, "You tell the guild, " + ReworkedMessage);
+		break;
+	case EGlobalMessageType::Auction:
+		AddChatData(Color, EMessageCategories::Chat, "You auction, " + ReworkedMessage);
+		break;
 	case EGlobalMessageType::Raid:
-		AddChatData(Color, EMessageCategories::Chat, "You tell your party, " + ReworkedMessage);
+		AddChatData(Color, EMessageCategories::Chat, "You tell your raid party, " + ReworkedMessage);
 		break;
 	case EGlobalMessageType::Shout:
 		AddChatData(Color, EMessageCategories::Chat, "You shout, " + ReworkedMessage);
@@ -100,7 +171,7 @@ void IPlayerChatInterface::SelfHearingSpeak(EGlobalMessageType Type, const FStri
 		AddChatData(Color, EMessageCategories::Chat, "You say out of character, " + ReworkedMessage);
 		break;
 	case EGlobalMessageType::Tell:
-		AddChatData(Color, EMessageCategories::Chat, "You told, " + ReworkedMessage);
+		AddChatData(Color, EMessageCategories::Chat, "You told " + Target + ", " + ReworkedMessage);
 		break;
 	}
 }

@@ -104,6 +104,34 @@ void IGameModeChatInterface::OOCSpeak(APlayerController* PlayerController, const
 
 //----------------------------------------------------------------------------------------------------------------------
 
+void IGameModeChatInterface::AuctionSpeak(APlayerController* PlayerController, const FString& String)
+{
+	const AGameModeBase* GameMode = Cast<AGameModeBase>(this);
+	IPlayerChatInterface* OriginalSpeaker = Cast<IPlayerChatInterface>(PlayerController);
+
+	check(GameMode)
+
+	if (!OriginalSpeaker)
+		return;
+
+	const FString FinalMessage = "'" + String + "'";
+	const FString CompleteString = OriginalSpeaker->GetChatName() + " auctions, " + FinalMessage;
+	FConstPlayerControllerIterator EndIterator = GameMode->GetWorld()->GetPlayerControllerIterator();
+	EndIterator.SetToEnd();
+
+	for (FConstPlayerControllerIterator PCIterator = GameMode->GetWorld()->GetPlayerControllerIterator(); PCIterator !=
+	     EndIterator; ++PCIterator)
+	{
+		if (IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(*PCIterator); ChatInterface && *PCIterator
+			!= PlayerController)
+		{
+			ChatInterface->Client_AddChatDataType(EGlobalMessageType::Auction, CompleteString);
+		}
+	}
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
 void IGameModeChatInterface::GroupSpeak(APlayerController* PlayerController, const FString& String)
 {
 	const AGameModeBase* GameMode = Cast<AGameModeBase>(this);
@@ -130,4 +158,115 @@ void IGameModeChatInterface::GroupSpeak(APlayerController* PlayerController, con
 TArray<APlayerController*> IGameModeChatInterface::GetGroupMembers(APlayerController* MainPlayerController)
 {
 	return {};
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+TArray<APlayerController*> IGameModeChatInterface::GetRaidMembers(APlayerController* PlayerController)
+{
+	return {};
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+TArray<APlayerController*> IGameModeChatInterface::GetGuildMembers(APlayerController* PlayerController)
+{
+	return {};
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void IGameModeChatInterface::TellSpeak(APlayerController* MainPlayerController, const FString& Target,
+                                       const FString& Message)
+{
+	const IPlayerChatInterface* OriginalSpeaker = Cast<IPlayerChatInterface>(MainPlayerController);
+	const FString FinalMessage = "'" + Message + "'";
+	const FString CompleteString = OriginalSpeaker->GetChatName() + " tells you, " + FinalMessage;
+
+	if (APlayerController* TargetPC = FindPlayerWithName(Target))
+	{
+		if (IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(TargetPC); ChatInterface)
+			ChatInterface->Client_AddChatDataType(EGlobalMessageType::Tell, CompleteString);
+	}
+	else //we haven't find the player locally. maybe try another server
+	{
+		SendMessageToOtherServer(Target, OriginalSpeaker->GetChatName(), Message);
+	}
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+APlayerController* IGameModeChatInterface::FindPlayerWithName(const FString& Name)
+{
+	//this is a really bad way to do it, better use a lookup table
+	AGameModeBase* GameMode = Cast<AGameModeBase>(this);
+	FConstPlayerControllerIterator EndIterator = GameMode->GetWorld()->GetPlayerControllerIterator();
+	EndIterator.SetToEnd();
+
+	for (FConstPlayerControllerIterator PCIterator = GameMode->GetWorld()->GetPlayerControllerIterator(); PCIterator !=
+	     EndIterator; ++PCIterator)
+	{
+		IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(*PCIterator);
+
+		if (ChatInterface && ChatInterface->GetChatName() == Name)
+		{
+			return PCIterator->Get();
+		}
+	}
+
+	return nullptr;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void IGameModeChatInterface::SendMessageToOtherServer(const FString& Name, const FString& SenderName,
+                                                      const FString& Message)
+{
+	//override this to send the message to other servers with a Rest API or something
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void IGameModeChatInterface::RaidSpeak(APlayerController* PlayerController, const FString& String)
+{
+	const AGameModeBase* GameMode = Cast<AGameModeBase>(this);
+	const IPlayerChatInterface* OriginalSpeaker = Cast<IPlayerChatInterface>(PlayerController);
+
+	check(GameMode)
+
+	if (!OriginalSpeaker)
+		return;
+
+	const FString FinalMessage = "'" + String + "'";
+	const FString CompleteString = OriginalSpeaker->GetChatName() + " tells the raid, " + FinalMessage;
+
+	for (const auto& GroupMember : GetRaidMembers(PlayerController))
+	{
+		if (IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(GroupMember); ChatInterface && GroupMember
+			!= PlayerController)
+			ChatInterface->Client_AddChatDataType(EGlobalMessageType::Raid, CompleteString);
+	}
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void IGameModeChatInterface::GuildSpeak(APlayerController* PlayerController, const FString& String)
+{
+	const AGameModeBase* GameMode = Cast<AGameModeBase>(this);
+	const IPlayerChatInterface* OriginalSpeaker = Cast<IPlayerChatInterface>(PlayerController);
+
+	check(GameMode)
+
+	if (!OriginalSpeaker)
+		return;
+
+	const FString FinalMessage = "'" + String + "'";
+	const FString CompleteString = OriginalSpeaker->GetChatName() + " tells the guild, " + FinalMessage;
+
+	for (const auto& GroupMember : GetGuildMembers(PlayerController))
+	{
+		if (IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(GroupMember); ChatInterface && GroupMember
+			!= PlayerController)
+			ChatInterface->Client_AddChatDataType(EGlobalMessageType::Guild, CompleteString);
+	}
 }

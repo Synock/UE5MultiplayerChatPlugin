@@ -71,6 +71,8 @@ enum struct EGlobalMessageType : uint8
 	Shout UMETA(DisplayName = "Shout"),// server wide messaging
 	OOC UMETA(DisplayName = "OOC"),// server wide messaging Out Of Character
 	Tell UMETA(DisplayName = "Tell"),//private messaging
+	Guild UMETA(DisplayName = "Guild"),//guild wide messaging
+	Auction UMETA(DisplayName = "Auction"),//server wide auction messaging
 
 	// Below is Combat
 	CombatDamageGiven UMETA(DisplayName = "CombatDamageGiven"),// when player do damage

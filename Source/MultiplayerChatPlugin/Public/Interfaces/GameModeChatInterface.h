@@ -34,6 +34,9 @@ public:
 	virtual void OOCSpeak(APlayerController* PlayerController, const FString& String);
 
 	UFUNCTION()
+	virtual void AuctionSpeak(APlayerController* MainPlayerController, const FString& String);
+
+	UFUNCTION()
 	virtual void GroupSpeak(APlayerController* PlayerController, const FString& String);
 
 	/**
@@ -45,5 +48,37 @@ public:
 	UFUNCTION()
 	virtual TArray<APlayerController*> GetGroupMembers(APlayerController* PlayerController);
 
+	/**
+	 * @brief return the list of APlayerController that belong to the same Raid as PlayerController
+	 * by default it will return nothing
+	 * @param PlayerController the APlayerController to get the raid info from
+	 * @return the list of APlayerController that belong to the same Raid as PlayerController
+	 */
+	UFUNCTION()
+	virtual TArray<APlayerController*> GetRaidMembers(APlayerController* PlayerController);
+
+	/**
+	 * @brief return the list of APlayerController that belong to the same Guild as PlayerController
+	 * by default it will return nothing
+	 * @param PlayerController the APlayerController to get the Guild info from
+	 * @return the list of APlayerController that belong to the same Guild as PlayerController
+	 */
+	UFUNCTION()
+	virtual TArray<APlayerController*> GetGuildMembers(APlayerController* PlayerController);
+
+	UFUNCTION()
+	virtual void TellSpeak(APlayerController* MainPlayerController, const FString& Target, const FString& Message);
+
+	UFUNCTION()
+	virtual APlayerController* FindPlayerWithName(const FString& Name);
+
+	UFUNCTION()
+	virtual void SendMessageToOtherServer(const FString& Name, const FString& SenderName, const FString& Message);
+
+	UFUNCTION()
+	virtual void RaidSpeak(APlayerController* MainPlayerController, const FString& String);
+
+	UFUNCTION()
+	virtual void GuildSpeak(APlayerController* MainPlayerController, const FString& String);
 
 };

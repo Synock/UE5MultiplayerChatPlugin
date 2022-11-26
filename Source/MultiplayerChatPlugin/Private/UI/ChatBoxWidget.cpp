@@ -32,14 +32,22 @@ void UChatBoxWidget::HandleTextEnter()
 	}
 	else if(SelectedOption == "Raid")
 	{
-
+		PlayerChatInterface->RaidSpeak(InputString);
+	}
+	else if(SelectedOption == "Guild")
+	{
+		PlayerChatInterface->GuildSpeak(InputString);
 	}
 	else if(SelectedOption == "OOC")
 	{
 		PlayerChatInterface->OOCSpeak(InputString);
 	}
-	else if(SelectedOption == "Tell")
+	else if(SelectedOption == "Auction")
 	{
-
+		PlayerChatInterface->AuctionSpeak(InputString);
 	}
+	/*else if(SelectedOption == "Tell")
+	{
+		PlayerChatInterface->TellSpeak(InputString);
+	}*/
 }
