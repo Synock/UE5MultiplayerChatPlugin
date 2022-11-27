@@ -65,7 +65,7 @@ public:
 	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
 	/*void AMainPlayerController::Server_AreaSpeak_Implementation(const FString& Message, float Range)
 		{
-			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetWorld()->GetAuthGameMode()))
 				GameModeChat->AreaSpeak(this, Message, Range);
 		}
 	 **/
@@ -78,7 +78,7 @@ public:
 	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
 	/*void AMainPlayerController::Server_ShoutSpeak_Implementation(const FString& Message)
 		{
-			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetWorld()->GetAuthGameMode()))
 				GameModeChat->ShoutSpeak(this, Message);
 		}
 	 **/
@@ -91,7 +91,7 @@ public:
 	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
 	/*void AMainPlayerController::Server_OOCSpeak_Implementation(const FString& Message)
 		{
-			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetWorld()->GetAuthGameMode()))
 				GameModeChat->OOCSpeak(this, Message);
 		}
 	 **/
@@ -102,7 +102,7 @@ public:
 	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
 	/*void AMainPlayerController::Server_AuctionSpeak_Implementation(const FString& Message)
 		{
-			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetWorld()->GetAuthGameMode()))
 				GameModeChat->AuctionSpeak(this, Message);
 		}
 	 **/
@@ -124,7 +124,7 @@ public:
 	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
 	/*void AMainPlayerController::Server_GroupSpeak_Implementation(const FString& Message)
 		{
-			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetWorld()->GetAuthGameMode()))
 				GameModeChat->GroupSpeak(this, Message);
 		}
 	 **/
@@ -136,7 +136,7 @@ public:
 	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
 	/*void AMainPlayerController::Server_TellSpeak_Implementation(const FString& TargetName, const FString& Message)
 		{
-			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetWorld()->GetAuthGameMode()))
 				GameModeChat->TellSpeak(this, TargetName, Message);
 		}
 	 **/
@@ -148,7 +148,7 @@ public:
 	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
 	/*void AMainPlayerController::Server_RaidSpeak_Implementation(const FString& Message)
 		{
-			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetWorld()->GetAuthGameMode()))
 				GameModeChat->RaidSpeak(this, Message);
 		}
 	 **/
@@ -160,7 +160,7 @@ public:
 	//UFUNCTION(Server, reliable, Category = "Chat|Talk")
 	/*void AMainPlayerController::Server_GuildSpeak_Implementation(const FString& Message)
 		{
-			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetGameMode()))
+			if (IGameModeChatInterface* GameModeChat = Cast<IGameModeChatInterface>(GetWorld()->GetAuthGameMode()))
 				GameModeChat->GuildSpeak(this, Message);
 		}
 	 **/
