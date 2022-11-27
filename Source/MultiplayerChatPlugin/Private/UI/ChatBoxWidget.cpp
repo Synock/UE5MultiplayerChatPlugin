@@ -19,7 +19,7 @@ void UChatBoxWidget::HandleTextEnter()
 		FString Arguments;
 		InputString.Split(" ", &Command, &Arguments, ESearchCase::IgnoreCase, ESearchDir::FromStart);
 
-		Command = Command.RightChop(1);
+		Command = Command.IsEmpty() ? InputString.RightChop(1) : Command.RightChop(1);
 
 		if (Command.Equals("Tell", ESearchCase::IgnoreCase))
 		{
