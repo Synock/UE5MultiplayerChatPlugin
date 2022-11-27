@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ChatPluginDefinitions.h"
 #include "UObject/Interface.h"
 
 #include "GameModeChatInterface.generated.h"
@@ -80,5 +81,11 @@ public:
 
 	UFUNCTION()
 	virtual void GuildSpeak(APlayerController* MainPlayerController, const FString& String);
+
+	UFUNCTION()
+	virtual void AreaLog(EGlobalMessageType MessageType, const FString& Message, const FVector& Origin, float Range = 500.);
+
+	UFUNCTION()
+	virtual void AreaLogAroundPlayer(APlayerController* MainPlayerController, EGlobalMessageType MessageType, const FString& Message, float Range = 500.);
 
 };

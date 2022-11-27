@@ -6,7 +6,7 @@ The look'n'feel is entirely based on the chat system from the game Everquest as 
 It comes with a lot of predefined functions that run out of the box, but still require some implementation on the project side
 to handle RPCs notably.
 
-This plugin is going to be maintained and modified as it is part of another bigger personnal project.
+This plugin is going to be maintained and modified as it is part of another bigger personal project.
 Functions and interfaces are subject to sudden changes.
 
 ## Integration example
@@ -17,6 +17,8 @@ To see an integrated example go check out https://github.com/Synock/UE5PluginInt
 
 ### Predefined types of chat
 
+There are several predefined and ready to use chat types:
+
 * **Say** is a local, around the player chat with a default range of 5m.
 * **Tell** is a private messaging based on another player name.
 * **Group** is a group based chat.
@@ -25,6 +27,19 @@ To see an integrated example go check out https://github.com/Synock/UE5PluginInt
 * **Shout** is server based chat intended for in character zone discussions.
 * **Out** Of Character is a server based chat intended for out of character zone discussions.
 * **Auction** is a server buy/sell chat.
+
+![ChatExample](./Doc/Images/ChatExample.png?raw=true "ChatExample")
+
+Note that the style of the speaker is predefined to be different from the style of the player hearing it.
+
+![ChatExample2](./Doc/Images/ChatExample2.png?raw=true "ChatExample2")
+
+### Logging and Logging replication
+
+An array of ingame logging possibilities are available, allowing for both replicated logging stuff in an area, like spell casting, damage IO, and not replicated logging, such as XP gains.
+
+![LogExample](./Doc/Images/LogExample.png?raw=true "LogExample")
+
 
 ## Interfaces
 
@@ -49,6 +64,10 @@ The following functions actually does nothing with the given implementation and 
 * **_GetRaidMembers_** Return the raid members of the same group as a player.
 * **_GetGuildMembers_** Return the raid members of the same group as a player.
 * **_SendMessageToOtherServer_** Is meant to be a function to send message across different servers (using REST or whatever).
+
+Log oriented functions are also present, these allow to replicate logs based on the world around a particular location.
+* **_AddLogInArea_** allow to add a log to **every** player present in an area
+* **_AddLogAroundPlayer_** allows to add log to every player around another player, **_excluding_** this last one.
 
 ### IPlayerChatInterface
 

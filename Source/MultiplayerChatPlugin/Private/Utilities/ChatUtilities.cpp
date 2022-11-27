@@ -4,6 +4,7 @@
 #include "Utilities/ChatUtilities.h"
 
 #include "GameFramework/Character.h"
+#include "Interfaces/GameModeChatInterface.h"
 #include "Interfaces/PlayerChatInterface.h"
 
 
@@ -12,22 +13,30 @@ FMessageMetaData UChatUtilities::GetMessageMetaFromType(EGlobalMessageType Type)
 	switch (Type)
 	{
 	default:
-	case EGlobalMessageType::Unknown:return {};
+	case EGlobalMessageType::Unknown: return {};
 	case EGlobalMessageType::Say: return {EChatColor::White, EMessageCategories::Chat, EMessageReach::Area};
-	case EGlobalMessageType::Group:return {EChatColor::LightBlue, EMessageCategories::Chat, EMessageReach::Server};
-	case EGlobalMessageType::Raid:return {EChatColor::LightPurple, EMessageCategories::Chat, EMessageReach::Server};
-	case EGlobalMessageType::Shout:return {EChatColor::Red, EMessageCategories::Chat, EMessageReach::Server};
-	case EGlobalMessageType::OOC:return {EChatColor::DarkGreen, EMessageCategories::Chat, EMessageReach::Server};
-	case EGlobalMessageType::Tell:return {EChatColor::Purple, EMessageCategories::Chat, EMessageReach::External};
-	case EGlobalMessageType::Guild:return {EChatColor::Green, EMessageCategories::Chat, EMessageReach::External};
-	case EGlobalMessageType::Auction:return {EChatColor::Green, EMessageCategories::Chat, EMessageReach::Server};
-	case EGlobalMessageType::CombatDamageGiven:return {EChatColor::White, EMessageCategories::Combat, EMessageReach::Area};
-	case EGlobalMessageType::CombatDamageReceived:return {EChatColor::Red, EMessageCategories::Combat, EMessageReach::Local};
-	case EGlobalMessageType::CombatDamageOther:return {EChatColor::White, EMessageCategories::Combat, EMessageReach::Area};
-	case EGlobalMessageType::SpellCast:return {EChatColor::Blue, EMessageCategories::Combat, EMessageReach::Area};
-	case EGlobalMessageType::DotEffect:return {EChatColor::Yellow, EMessageCategories::Combat, EMessageReach::Local};
-	case EGlobalMessageType::Consider:return {EChatColor::White, EMessageCategories::World, EMessageReach::Local};
-	case EGlobalMessageType::ServerAnnouncement:return {EChatColor::Yellow, EMessageCategories::Server, EMessageReach::Server};
+	case EGlobalMessageType::Group: return {EChatColor::LightBlue, EMessageCategories::Chat, EMessageReach::Server};
+	case EGlobalMessageType::Raid: return {EChatColor::LightPurple, EMessageCategories::Chat, EMessageReach::Server};
+	case EGlobalMessageType::Shout: return {EChatColor::Red, EMessageCategories::Chat, EMessageReach::Server};
+	case EGlobalMessageType::OOC: return {EChatColor::DarkGreen, EMessageCategories::Chat, EMessageReach::Server};
+	case EGlobalMessageType::Tell: return {EChatColor::Purple, EMessageCategories::Chat, EMessageReach::External};
+	case EGlobalMessageType::Guild: return {EChatColor::Green, EMessageCategories::Chat, EMessageReach::External};
+	case EGlobalMessageType::Auction: return {EChatColor::Green, EMessageCategories::Chat, EMessageReach::Server};
+	case EGlobalMessageType::CombatDamageGiven: return {
+			EChatColor::White, EMessageCategories::Combat, EMessageReach::Area
+		};
+	case EGlobalMessageType::CombatDamageReceived: return {
+			EChatColor::Red, EMessageCategories::Combat, EMessageReach::Local
+		};
+	case EGlobalMessageType::CombatDamageOther: return {
+			EChatColor::White, EMessageCategories::Combat, EMessageReach::Area
+		};
+	case EGlobalMessageType::SpellCast: return {EChatColor::Blue, EMessageCategories::Combat, EMessageReach::Area};
+	case EGlobalMessageType::DotEffect: return {EChatColor::Yellow, EMessageCategories::Combat, EMessageReach::Local};
+	case EGlobalMessageType::Consider: return {EChatColor::White, EMessageCategories::World, EMessageReach::Local};
+	case EGlobalMessageType::ServerAnnouncement: return {
+			EChatColor::Yellow, EMessageCategories::Server, EMessageReach::Server
+		};
 	}
 }
 
@@ -73,3 +82,20 @@ void UChatUtilities::AddChatDataTypeFromAvatar(ACharacter* Character, EGlobalMes
 		AddChatDataType(PC, Type, Message);
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+
+void UChatUtilities::AddLogInArea(AGameModeBase* GameMode, EGlobalMessageType Type, const FString& Message,
+                                  const FVector& Origin, float Range)
+{
+	if (IGameModeChatInterface* ChatInterface = Cast<IGameModeChatInterface>(GameMode))
+		ChatInterface->AreaLog(Type, Message, Origin, Range);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void UChatUtilities::AddLogAroundPlayer(APlayerController* PC, EGlobalMessageType Type, const FString& Message,
+	float Range)
+{
+	if (IGameModeChatInterface* ChatInterface = Cast<IGameModeChatInterface>(PC->GetWorld()->GetAuthGameMode()))
+		ChatInterface->AreaLogAroundPlayer(PC, Type, Message, Range);
+}

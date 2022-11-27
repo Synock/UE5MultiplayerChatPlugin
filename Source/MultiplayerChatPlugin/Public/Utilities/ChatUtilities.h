@@ -36,4 +36,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Chat")
 	static void AddChatDataTypeFromAvatar(ACharacter* Character, EGlobalMessageType Type, const FString & Message);
 
+	//helper function that allows to log stuff in an area
+	UFUNCTION(BlueprintCallable, Category="Chat")
+	static void AddLogInArea(AGameModeBase* GameMode, EGlobalMessageType Type, const FString & Message, const FVector& Origin, float Range = 100.);
+
+	//helper function that allows to log stuff in an area around a player, excluding him
+	UFUNCTION(BlueprintCallable, Category="Chat")
+	static void AddLogAroundPlayer(APlayerController* PC, EGlobalMessageType Type, const FString & Message, float Range = 100.);
+
 };
