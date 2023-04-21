@@ -9,6 +9,12 @@ void UChatBoxWidget::HandleTextEnter()
 {
 	FString InputString = TextBox->GetText().ToString();
 
+	if (InputString.IsEmpty())
+	{
+		ReturnFocus();
+		return;
+	}
+
 	TextBox->SetText(FText::GetEmpty());
 
 	IPlayerChatInterface* PlayerChatInterface = Cast<IPlayerChatInterface>(GetOwningPlayer());
@@ -32,7 +38,7 @@ void UChatBoxWidget::HandleTextEnter()
 		{
 			PlayerChatInterface->ProcessCommands(Command, Arguments);
 		}
-
+		ReturnFocus();
 		return;
 	}
 
@@ -68,4 +74,20 @@ void UChatBoxWidget::HandleTextEnter()
 	{
 		PlayerChatInterface->TellSpeak(InputString);
 	}*/
+	ReturnFocus();
+}
+
+void UChatBoxWidget::ReturnFocus()
+{
+	OnReleaseFocusRequired.Broadcast();
+}
+
+bool UChatBoxWidget::HasFocus() const
+{
+	return TextBox->HasUserFocus(GetOwningPlayer());
+}
+
+void UChatBoxWidget::SetChatFocus()
+{
+	TextBox->SetFocus();
 }

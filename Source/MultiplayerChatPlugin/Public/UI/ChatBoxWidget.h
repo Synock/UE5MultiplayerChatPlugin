@@ -9,6 +9,7 @@
 #include "Components/EditableTextBox.h"
 #include "ChatBoxWidget.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FReleaseFocusRequired);
 /**
  *
  */
@@ -27,7 +28,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void HandleTextEnter();
 
-
+	UFUNCTION(BlueprintCallable)
+	void ReturnFocus();
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
@@ -35,4 +37,15 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void AddChatDataType(EGlobalMessageType Type, const FString& Message);
+
+	UFUNCTION(BlueprintCallable)
+	bool HasFocus() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SetChatFocus();
+
+	UPROPERTY(BlueprintAssignable)
+	FReleaseFocusRequired OnReleaseFocusRequired;
+
+
 };
