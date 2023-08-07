@@ -44,4 +44,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Chat")
 	static void AddLogAroundPlayer(APlayerController* PC, EGlobalMessageType Type, const FString & Message, float Range = 100.);
 
+	//helper function that allows to log stuff in an area around a character, if it's a player excluding him
+	UFUNCTION(BlueprintCallable, Category="Chat")
+	static void AddLogAroundAvatar(AActor* Character, EGlobalMessageType Type, const FString& Message, float Range = 100.);
+
 };

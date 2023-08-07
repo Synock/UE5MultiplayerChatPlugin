@@ -94,8 +94,29 @@ void UChatUtilities::AddLogInArea(AGameModeBase* GameMode, EGlobalMessageType Ty
 //----------------------------------------------------------------------------------------------------------------------
 
 void UChatUtilities::AddLogAroundPlayer(APlayerController* PC, EGlobalMessageType Type, const FString& Message,
-	float Range)
+                                        float Range)
 {
 	if (IGameModeChatInterface* ChatInterface = Cast<IGameModeChatInterface>(PC->GetWorld()->GetAuthGameMode()))
 		ChatInterface->AreaLogAroundPlayer(PC, Type, Message, Range);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void UChatUtilities::AddLogAroundAvatar(AActor* Avatar, EGlobalMessageType Type, const FString& Message,
+                                        float Range)
+{
+	if (IGameModeChatInterface* ChatInterface = Cast<IGameModeChatInterface>(Avatar->GetWorld()->GetAuthGameMode()))
+	{
+		ACharacter* Character = Cast<ACharacter>(Avatar);
+		if(Character)
+		{
+			///It's a player avatar
+			if (APlayerController* PC = Cast<APlayerController>(Character->GetController()))
+				{
+					ChatInterface->AreaLogAroundPlayer(PC, Type, Message, Range);
+					return;
+				}
+		}
+		ChatInterface->AreaLog(Type, Message, Character->GetActorLocation(), Range);
+	}
 }
