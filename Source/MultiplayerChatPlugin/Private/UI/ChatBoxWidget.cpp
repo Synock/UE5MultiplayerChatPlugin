@@ -19,7 +19,7 @@ void UChatBoxWidget::HandleTextEnter()
 
 	IPlayerChatInterface* PlayerChatInterface = Cast<IPlayerChatInterface>(GetOwningPlayer());
 
-	if (InputString[0] == '/')
+	if (InputString[0] == ServerCommandTriggerCharacter)
 	{
 		FString Command;
 		FString Arguments;
@@ -27,12 +27,54 @@ void UChatBoxWidget::HandleTextEnter()
 
 		Command = Command.IsEmpty() ? InputString.RightChop(1) : Command.RightChop(1);
 
-		if (Command.Equals("Tell", ESearchCase::IgnoreCase))
+		PlayerChatInterface->ProcessServerCommands(Command, Arguments);
+
+		ReturnFocus();
+		return;
+	}
+
+	if (InputString[0] == CommandTriggerCharacter)
+	{
+		FString Command;
+		FString Arguments;
+		InputString.Split(" ", &Command, &Arguments, ESearchCase::IgnoreCase, ESearchDir::FromStart);
+
+		Command = Command.IsEmpty() ? InputString.RightChop(1) : Command.RightChop(1);
+
+		if (Command.Equals("Tell", ESearchCase::IgnoreCase) || Command.Equals("t", ESearchCase::IgnoreCase))
 		{
 			FString TargetName;
 			FString Message;
 			Arguments.Split(" ", &TargetName, &Message, ESearchCase::IgnoreCase, ESearchDir::FromStart);
 			PlayerChatInterface->TellSpeak(TargetName, Message);
+		}
+		else if (Command.Equals("Say", ESearchCase::IgnoreCase) || Command.Equals("s", ESearchCase::IgnoreCase))
+		{
+			PlayerChatInterface->AreaSpeak(Arguments, 1500.f);
+		}
+		else if (Command.Equals("Group", ESearchCase::IgnoreCase) || Command.Equals("g", ESearchCase::IgnoreCase))
+		{
+			PlayerChatInterface->GroupSpeak(Arguments);
+		}
+		else if (Command.Equals("Shout", ESearchCase::IgnoreCase) )
+		{
+			PlayerChatInterface->ShoutSpeak(Arguments);
+		}
+		else if (Command.Equals("Raid", ESearchCase::IgnoreCase))
+		{
+			PlayerChatInterface->RaidSpeak(Arguments);
+		}
+		else if (Command.Equals("Guild", ESearchCase::IgnoreCase))
+		{
+			PlayerChatInterface->GuildSpeak(Arguments);
+		}
+		else if (Command.Equals("OOC", ESearchCase::IgnoreCase)|| Command.Equals("o", ESearchCase::IgnoreCase))
+		{
+			PlayerChatInterface->OOCSpeak(Arguments);
+		}
+		else if (Command.Equals("Auction", ESearchCase::IgnoreCase))
+		{
+			PlayerChatInterface->AuctionSpeak(Arguments);
 		}
 		else
 		{
@@ -70,10 +112,6 @@ void UChatBoxWidget::HandleTextEnter()
 	{
 		PlayerChatInterface->AuctionSpeak(InputString);
 	}
-	/*else if(SelectedOption == "Tell")
-	{
-		PlayerChatInterface->TellSpeak(InputString);
-	}*/
 	ReturnFocus();
 }
 

@@ -10,6 +10,12 @@ void IPlayerChatInterface::ProcessCommands(const FString& Command, const FString
 {
 	//Do something about the commands
 }
+//----------------------------------------------------------------------------------------------------------------------
+
+void IPlayerChatInterface::ProcessServerCommands(const FString& Command, const FString& Arguments)
+{
+	//Do something about the commands that have server impact
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 

@@ -31,6 +31,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void ReturnFocus();
 
+	static constexpr TCHAR CommandTriggerCharacter = '/';
+	static constexpr TCHAR ServerCommandTriggerCharacter = '#';
+
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void AddChatData(EChatColor Color, EMessageCategories Category, const FString& Message);
