@@ -304,6 +304,8 @@ void IGameModeChatInterface::AreaLog(EGlobalMessageType MessageType, const FStri
 	}
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+
 void IGameModeChatInterface::AreaLogAroundPlayer(APlayerController* PlayerController,
 	EGlobalMessageType MessageType, const FString& Message, float Range)
 {
@@ -332,5 +334,26 @@ void IGameModeChatInterface::AreaLogAroundPlayer(APlayerController* PlayerContro
 			if (ChatInterface && Controller != PlayerController)
 				ChatInterface->Client_AddChatDataType(MessageType, Message);
 		}
+	}
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void IGameModeChatInterface::ServerBroadcast(EGlobalMessageType MessageType, const FString& Message)
+{
+	AGameModeBase* GameMode = Cast<AGameModeBase>(this);
+	check(GameMode)
+
+	FConstPlayerControllerIterator EndIterator = GameMode->GetWorld()->GetPlayerControllerIterator();
+	EndIterator.SetToEnd();
+
+	for (FConstPlayerControllerIterator PCIterator = GameMode->GetWorld()->GetPlayerControllerIterator(); PCIterator !=
+		 EndIterator; ++PCIterator)
+	{
+		IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(*PCIterator);
+
+		if (ChatInterface)
+			ChatInterface->Client_AddChatDataType(MessageType,Message);
+
 	}
 }

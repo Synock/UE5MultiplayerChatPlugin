@@ -22,7 +22,6 @@ class MULTIPLAYERCHATPLUGIN_API IGameModeChatInterface
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
 	UFUNCTION()
@@ -87,5 +86,9 @@ public:
 
 	UFUNCTION()
 	virtual void AreaLogAroundPlayer(APlayerController* MainPlayerController, EGlobalMessageType MessageType, const FString& Message, float Range = 500.);
+
+	//Send message to everyone
+	UFUNCTION()
+	virtual void ServerBroadcast(EGlobalMessageType MessageType, const FString& Message);
 
 };
