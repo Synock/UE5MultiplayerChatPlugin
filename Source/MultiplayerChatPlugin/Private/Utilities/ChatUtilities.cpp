@@ -48,6 +48,21 @@ void UChatUtilities::AddChatData(APlayerController* PC, EChatColor Color, EMessa
 	if (IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(PC))
 		ChatInterface->Client_AddChatData(Color, Category, Message);
 }
+//----------------------------------------------------------------------------------------------------------------------
+
+void UChatUtilities::AddChatConstantData(APlayerController* PC, EChatColor Color, EMessageCategories Category,
+	int32 MessageId)
+{
+	if (IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(PC))
+		ChatInterface->Client_AddChatConstantData(Color, Category, MessageId);
+}
+
+void UChatUtilities::AddChatConstantWithVariablesData(APlayerController* PC, EChatColor Color,
+	EMessageCategories Category, int32 MessageId, const TArray<FString>& Variables)
+{
+	if (IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(PC))
+		ChatInterface->Client_AddChatConstantWithVariablesData(Color, Category, MessageId, Variables);
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -56,6 +71,15 @@ void UChatUtilities::AddChatDataFromAvatar(ACharacter* Character, EChatColor Col
 {
 	if (APlayerController* PC = Cast<APlayerController>(Character->GetController()))
 		AddChatData(PC, Color, Category, Message);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void UChatUtilities::AddChatConstatDataFromAvatar(ACharacter* Character, EChatColor Color, EMessageCategories Category,
+	int32 MessageId)
+{
+	if (APlayerController* PC = Cast<APlayerController>(Character->GetController()))
+		AddChatConstantData(PC, Color, Category, MessageId);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

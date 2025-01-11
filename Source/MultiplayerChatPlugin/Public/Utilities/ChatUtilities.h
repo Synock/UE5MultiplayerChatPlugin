@@ -20,9 +20,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Chat")
 	static void AddChatData(APlayerController* PC, EChatColor Color, EMessageCategories Category, const FString & Message);
 
+	//Try to add chat data from a player Controller
+	UFUNCTION(BlueprintCallable, Category="Chat")
+	static void AddChatConstantData(APlayerController* PC, EChatColor Color, EMessageCategories Category, int32 MessageId);
+
+	//Try to add chat data from a player Controller
+	UFUNCTION(BlueprintCallable, Category="Chat")
+	static void AddChatConstantWithVariablesData(APlayerController* PC, EChatColor Color, EMessageCategories Category, int32 MessageId, const TArray<FString>& Variables);
+
 	//helper function that allows to display chat from a character
 	UFUNCTION(BlueprintCallable, Category="Chat")
 	static void AddChatDataFromAvatar(ACharacter* Character, EChatColor Color, EMessageCategories Category, const FString & Message);
+
+	//helper function that allows to display chat from a character
+	UFUNCTION(BlueprintCallable, Category="Chat")
+	static void AddChatConstatDataFromAvatar(ACharacter* Character, EChatColor Color, EMessageCategories Category, int32 MessageId);
 
 	//helper function that display a message in yellow with DEBUG - in front of it
 	UFUNCTION(BlueprintCallable, Category="Chat")

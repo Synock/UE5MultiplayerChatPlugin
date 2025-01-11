@@ -46,12 +46,37 @@ public:
 	 */
 	virtual void Client_AddChatDataType(EGlobalMessageType Type, const FString& Message) = 0;
 
+	//this functions ensure it is run on the client, you'll have to redefine it at least by copying the following code
+	//UFUNCTION(Client, unreliable, Category = "Chat|Display")
+	/* virtual void Client_AddChatData_Implementation(EChatColor Color, EMessageCategories Category, FName MessageId)
+	 * {
+	 *		AddChatConstantData(Color, Category, MessageId);
+	 * }
+	 */
+	virtual void Client_AddChatConstantData(EChatColor Color, EMessageCategories Category, int32 MessageId) = 0;
+
+
+	//this functions ensure it is run on the client, you'll have to redefine it at least by copying the following code
+	//UFUNCTION(Client, unreliable, Category = "Chat|Display")
+	/* virtual void Client_AddChatConstantWithVariablesData(EChatColor Color, EMessageCategories Category, int32 MessageId, const TArray<FString>& Array)
+	 * {
+	 *		AddChatConstantWithVariablesData(Color, Category, MessageId, Variables);
+	 * }
+	 */
+	virtual void Client_AddChatConstantWithVariablesData(EChatColor Color, EMessageCategories Category, int32 MessageId, const TArray<FString>& Variables) = 0;
+
 	//return the ingame chat name of a player
 	UFUNCTION(BlueprintCallable, Category = "Chat|Display")
 	virtual FString GetChatName() const = 0;
 
 	UFUNCTION(BlueprintCallable, Category = "Chat|Display")
 	virtual void AddChatData(EChatColor Color, EMessageCategories Category, const FString& Message);
+
+	UFUNCTION(BlueprintCallable, Category = "Chat|Display")
+	virtual void AddChatConstantData(EChatColor Color, EMessageCategories Category, int32 MessageId);
+
+	UFUNCTION(BlueprintCallable, Category = "Chat|Display")
+	virtual void AddChatConstantWithVariablesData(EChatColor Color, EMessageCategories Category, int32 MessageId, const TArray<FString>& Variables);
 
 	UFUNCTION(BlueprintCallable, Category = "Chat|Display")
 	virtual void AddChatDataType(EGlobalMessageType Type, const FString& Message);
@@ -167,5 +192,4 @@ public:
 		}
 	 **/
 	virtual void Server_GuildSpeak(const FString& Message) = 0;
-
 };

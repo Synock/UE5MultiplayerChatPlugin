@@ -27,6 +27,23 @@ void IPlayerChatInterface::AddChatData(EChatColor Color, EMessageCategories Cate
 	}
 }
 
+void IPlayerChatInterface::AddChatConstantData(EChatColor Color, EMessageCategories Category, int32 MessageId)
+{
+	if (IHUDChatInterface* ChatHUD = GetChatHUD())
+	{
+		ChatHUD->AddChatConstantData(Color, Category, MessageId);
+	}
+}
+
+void IPlayerChatInterface::AddChatConstantWithVariablesData(EChatColor Color, EMessageCategories Category,
+	int32 MessageId, const TArray<FString>& Variables)
+{
+	if (IHUDChatInterface* ChatHUD = GetChatHUD())
+	{
+		ChatHUD->AddChatConstantWithVariablesData(Color, Category, MessageId, Variables);
+	}
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 
 void IPlayerChatInterface::AddChatDataType(EGlobalMessageType Type, const FString& Message)
