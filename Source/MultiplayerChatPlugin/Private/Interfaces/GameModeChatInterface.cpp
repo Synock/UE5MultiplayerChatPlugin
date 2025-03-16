@@ -336,6 +336,71 @@ void IGameModeChatInterface::AreaLogAroundPlayer(APlayerController* PlayerContro
 		}
 	}
 }
+//----------------------------------------------------------------------------------------------------------------------
+
+void IGameModeChatInterface::AreaConstantLogAroundPlayer(APlayerController* PlayerController,
+	EChatColor Color, EMessageCategories Category, int32 MessageId, float Range)
+{
+	AGameModeBase* GameMode = Cast<AGameModeBase>(this);
+	check(GameMode)
+
+	const TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes{{EObjectTypeQuery::ObjectTypeQuery3}};
+	const TArray<AActor*> ActorsToIgnore{PlayerController->GetPawn()};
+	TArray<AActor*> ActorArray;
+	const bool OverlapStatus = UKismetSystemLibrary::SphereOverlapActors(
+		GameMode->GetWorld(), PlayerController->GetPawn()->GetActorLocation(), Range,
+		ObjectTypes, nullptr,
+		ActorsToIgnore, ActorArray);
+
+	UKismetSystemLibrary::DrawDebugSphere(GameMode->GetWorld(), PlayerController->GetPawn()->GetActorLocation(), Range,
+										  8,
+										  OverlapStatus ? FColor::Green : FColor::Red, 3.f, 0.f);
+
+	for (auto& Actor : ActorArray)
+	{
+		if (ACharacter* Character = Cast<ACharacter>(Actor))
+		{
+			AController* Controller = Character->GetController();
+			IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(Controller);
+
+			if (ChatInterface && Controller != PlayerController)
+				ChatInterface->Client_AddChatConstantData(Color, Category, MessageId);
+		}
+	}
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void IGameModeChatInterface::AreaConstantLog(EChatColor Color, EMessageCategories Category, int32 MessageId,
+	const FVector& Origin, float Range)
+{
+	AGameModeBase* GameMode = Cast<AGameModeBase>(this);
+	check(GameMode)
+
+	const TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes{{EObjectTypeQuery::ObjectTypeQuery3}};
+	const TArray<AActor*> ActorsToIgnore{};
+	TArray<AActor*> ActorArray;
+	const bool OverlapStatus = UKismetSystemLibrary::SphereOverlapActors(
+		GameMode->GetWorld(), Origin, Range,
+		ObjectTypes, nullptr,
+		ActorsToIgnore, ActorArray);
+
+	UKismetSystemLibrary::DrawDebugSphere(GameMode->GetWorld(), Origin, Range,
+										  8,
+										  OverlapStatus ? FColor::Green : FColor::Red, 3.f, 0.f);
+
+	for (auto& Actor : ActorArray)
+	{
+		if (ACharacter* Character = Cast<ACharacter>(Actor))
+		{
+			AController* Controller = Character->GetController();
+			IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(Controller);
+
+			if (ChatInterface)
+				ChatInterface->Client_AddChatConstantData(Color,Category,MessageId);
+		}
+	}
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 

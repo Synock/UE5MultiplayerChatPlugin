@@ -75,7 +75,7 @@ void UChatUtilities::AddChatDataFromAvatar(ACharacter* Character, EChatColor Col
 
 //----------------------------------------------------------------------------------------------------------------------
 
-void UChatUtilities::AddChatConstatDataFromAvatar(ACharacter* Character, EChatColor Color, EMessageCategories Category,
+void UChatUtilities::AddChatConstantDataFromAvatar(ACharacter* Character, EChatColor Color, EMessageCategories Category,
 	int32 MessageId)
 {
 	if (APlayerController* PC = Cast<APlayerController>(Character->GetController()))
@@ -142,5 +142,26 @@ void UChatUtilities::AddLogAroundAvatar(AActor* Avatar, EGlobalMessageType Type,
 				}
 		}
 		ChatInterface->AreaLog(Type, Message, Character->GetActorLocation(), Range);
+	}
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void UChatUtilities::AddConstantLogAroundAvatar(AActor* Avatar, EChatColor Color, EMessageCategories Category, int32 MessageId,
+	float Range)
+{
+	if (IGameModeChatInterface* ChatInterface = Cast<IGameModeChatInterface>(Avatar->GetWorld()->GetAuthGameMode()))
+	{
+		ACharacter* Character = Cast<ACharacter>(Avatar);
+		if(Character)
+		{
+			///It's a player avatar
+			if (APlayerController* PC = Cast<APlayerController>(Character->GetController()))
+			{
+				ChatInterface->AreaConstantLogAroundPlayer(PC, Color, Category, MessageId, Range);
+				return;
+			}
+		}
+		ChatInterface->AreaConstantLog(Color, Category,MessageId, Character->GetActorLocation(), Range);
 	}
 }

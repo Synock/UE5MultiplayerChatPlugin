@@ -87,6 +87,12 @@ public:
 	UFUNCTION()
 	virtual void AreaLogAroundPlayer(APlayerController* MainPlayerController, EGlobalMessageType MessageType, const FString& Message, float Range = 500.);
 
+	UFUNCTION()
+	virtual void AreaConstantLogAroundPlayer(APlayerController* MainPlayerController, EChatColor Color, EMessageCategories Category, int32 MessageId, float Range = 500.);
+
+	UFUNCTION()
+	virtual void AreaConstantLog(EChatColor Color, EMessageCategories Category, int32 MessageId, const FVector& Origin, float Range = 500.);
+
 	//Send message to everyone
 	UFUNCTION()
 	virtual void ServerBroadcast(EGlobalMessageType MessageType, const FString& Message);
