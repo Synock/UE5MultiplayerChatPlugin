@@ -69,8 +69,9 @@ void UChatUtilities::AddChatConstantWithVariablesData(APlayerController* PC, ECh
 void UChatUtilities::AddChatDataFromAvatar(ACharacter* Character, EChatColor Color, EMessageCategories Category,
                                            const FString& Message)
 {
-	if (APlayerController* PC = Cast<APlayerController>(Character->GetController()))
-		AddChatData(PC, Color, Category, Message);
+	if (Character)
+		if (APlayerController* PC = Cast<APlayerController>(Character->GetController()))
+			AddChatData(PC, Color, Category, Message);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
