@@ -219,10 +219,26 @@ APlayerController* IGameModeChatInterface::FindPlayerWithName(const FString& Nam
 
 //----------------------------------------------------------------------------------------------------------------------
 
-void IGameModeChatInterface::SendMessageToOtherServer(const FString& Name, const FString& SenderName,
-                                                      const FString& Message)
+void IGameModeChatInterface::SendMessageToOtherServer(const FString& TargetName, const FString& SenderName,
+                                                       const FString& Message)
 {
-	//override this to send the message to other servers with a Rest API or something
+	// Override in the game-side GameMode to POST to the gateway's /chat/tell endpoint.
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void IGameModeChatInterface::ReceiveCrossServerTell(const FString& SenderName, const FString& TargetName,
+                                                    const FString& Message)
+{
+	// Default: find the target player on this zone and deliver the tell.
+	if (APlayerController* TargetPC = FindPlayerWithName(TargetName))
+	{
+		if (IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(TargetPC))
+		{
+			const FString CompleteString = SenderName + TEXT(" tells you, '") + Message + TEXT("'");
+			ChatInterface->Client_AddChatDataType(EGlobalMessageType::Tell, CompleteString);
+		}
+	}
 }
 
 //----------------------------------------------------------------------------------------------------------------------

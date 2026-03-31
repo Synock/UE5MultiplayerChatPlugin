@@ -73,7 +73,14 @@ public:
 	virtual APlayerController* FindPlayerWithName(const FString& Name);
 
 	UFUNCTION()
-	virtual void SendMessageToOtherServer(const FString& Name, const FString& SenderName, const FString& Message);
+	virtual void SendMessageToOtherServer(const FString& TargetName, const FString& SenderName, const FString& Message);
+
+	/**
+	 * Called by the cross-server listener when an inbound direct message arrives for a player on this server.
+	 * Default implementation finds TargetName locally and pushes the message; override to customise.
+	 */
+	UFUNCTION()
+	virtual void ReceiveCrossServerTell(const FString& SenderName, const FString& TargetName, const FString& Message);
 
 	UFUNCTION()
 	virtual void RaidSpeak(APlayerController* MainPlayerController, const FString& String);
