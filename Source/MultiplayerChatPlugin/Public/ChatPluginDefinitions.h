@@ -88,4 +88,10 @@ enum struct EGlobalMessageType : uint8
 	ServerAnnouncement UMETA(DisplayName = "ServerAnnouncement")
 };
 
+/** Maximum character count for a single player chat message. */
+static constexpr int32 MaxPlayerMessageLength = 512;
+
+/** Strip rich-text markup characters from user-supplied chat input to prevent injection. */
+MULTIPLAYERCHATPLUGIN_API FString SanitizeChatMessage(const FString& RawMessage);
+
 

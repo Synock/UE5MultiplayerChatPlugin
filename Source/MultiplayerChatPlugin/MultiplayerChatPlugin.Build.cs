@@ -25,7 +25,7 @@ public class MultiplayerChatPlugin : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core", "UMG", "HTTPServer",
+				"Core", "UMG", "HTTP", "HTTPServer",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -36,7 +36,6 @@ public class MultiplayerChatPlugin : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
-				"UMG",
 				"Slate",
 				"SlateCore",
 				"Json",

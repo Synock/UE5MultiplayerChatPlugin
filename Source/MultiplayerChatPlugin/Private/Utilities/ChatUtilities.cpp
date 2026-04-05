@@ -7,6 +7,21 @@
 #include "Interfaces/GameModeChatInterface.h"
 #include "Interfaces/PlayerChatInterface.h"
 
+//----------------------------------------------------------------------------------------------------------------------
+
+FString SanitizeChatMessage(const FString& RawMessage)
+{
+	// Clamp to max length.
+	FString Out = RawMessage.Left(MaxPlayerMessageLength);
+
+	// Strip rich-text markup delimiters to prevent injection into UMG RichTextBlock.
+	Out.ReplaceInline(TEXT("<"), TEXT(""), ESearchCase::CaseSensitive);
+	Out.ReplaceInline(TEXT(">"), TEXT(""), ESearchCase::CaseSensitive);
+
+	return Out;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 
 FMessageMetaData UChatUtilities::GetMessageMetaFromType(EGlobalMessageType Type)
 {

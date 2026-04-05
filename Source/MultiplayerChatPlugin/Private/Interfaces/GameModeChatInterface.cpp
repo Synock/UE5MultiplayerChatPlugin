@@ -3,6 +3,7 @@
 
 #include "Interfaces/GameModeChatInterface.h"
 
+#include "Components/CrossServerChatSenderComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/GameModeBase.h"
 #include "Interfaces/PlayerChatInterface.h"
@@ -222,7 +223,15 @@ APlayerController* IGameModeChatInterface::FindPlayerWithName(const FString& Nam
 void IGameModeChatInterface::SendMessageToOtherServer(const FString& TargetName, const FString& SenderName,
                                                        const FString& Message)
 {
-	// Override in the game-side GameMode to POST to the gateway's /chat/tell endpoint.
+	// Delegate to the CrossServerChatSenderComponent if present on the GameMode actor.
+	AActor* GameModeActor = Cast<AActor>(this);
+	if (!GameModeActor)
+		return;
+
+	if (UCrossServerChatSenderComponent* Sender = GameModeActor->FindComponentByClass<UCrossServerChatSenderComponent>())
+	{
+		Sender->SendTell(SenderName, TargetName, Message);
+	}
 }
 
 //----------------------------------------------------------------------------------------------------------------------

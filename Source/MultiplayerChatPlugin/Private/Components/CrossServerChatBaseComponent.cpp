@@ -2,6 +2,7 @@
 
 #include "Components/CrossServerChatBaseComponent.h"
 
+#include "ChatPluginDefinitions.h"
 #include "HttpServerModule.h"
 #include "HttpServerRequest.h"
 #include "HttpServerResponse.h"
@@ -111,9 +112,9 @@ bool UCrossServerChatBaseComponent::HandleInboundTell(const FHttpServerRequest& 
 	}
 
 	// --- Parse JSON body ---
-	// Body is TArray<uint8>; convert to FString via UTF-8 decode.
-	const FString BodyStr = FString(
-		UTF8_TO_TCHAR(reinterpret_cast<const char*>(Request.Body.GetData())));
+	// Body is TArray<uint8>; convert to FString via UTF-8 decode with explicit length.
+	const FUTF8ToTCHAR Converter(reinterpret_cast<const ANSICHAR*>(Request.Body.GetData()), Request.Body.Num());
+	const FString BodyStr(Converter.Length(), Converter.Get());
 
 	TSharedPtr<FJsonObject> JsonObject;
 	const TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(BodyStr);
@@ -135,6 +136,12 @@ bool UCrossServerChatBaseComponent::HandleInboundTell(const FHttpServerRequest& 
 		       TEXT("CrossServerChatBaseComponent: Rejected tell - missing required fields"));
 		ReplyError(OnComplete, 400, TEXT("Missing required fields: sender, target, message"));
 		return true;
+	}
+
+	// Clamp message to MaxPlayerMessageLength to prevent oversized payloads.
+	if (Message.Len() > MaxPlayerMessageLength)
+	{
+		Message = Message.Left(MaxPlayerMessageLength);
 	}
 
 	UE_LOG(LogCrossServerChat, Log,
