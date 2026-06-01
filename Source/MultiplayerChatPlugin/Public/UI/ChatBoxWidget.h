@@ -19,10 +19,10 @@ class MULTIPLAYERCHATPLUGIN_API UChatBoxWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UEditableTextBox* TextBox = nullptr;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UComboBoxString* ChatSelection = nullptr;
 
 	UFUNCTION(BlueprintCallable)
