@@ -40,7 +40,7 @@ void IGameModeChatInterface::AreaSpeak(APlayerController* PlayerController, cons
 			IPlayerChatInterface* ChatInterface = Cast<IPlayerChatInterface>(Controller);
 
 			if (ChatInterface && Controller != PlayerController)
-				ChatInterface->Client_AddChatData(EChatColor::White, EMessageCategories::Chat, FinalMessage);
+				ChatInterface->Client_AddChatDataType(EGlobalMessageType::Say, FinalMessage);
 		}
 	}
 }

@@ -5,8 +5,29 @@
 
 #include "Interfaces/PlayerChatInterface.h"
 
+void UChatBoxWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	if (ChatSelection)
+	{
+		ChatSelection->OnSelectionChanged.AddUniqueDynamic(this, &UChatBoxWidget::HandleChatSelectionChanged);
+	}
+}
+
+void UChatBoxWidget::HandleChatSelectionChanged(FString SelectedItem, ESelectInfo::Type SelectionType)
+{
+	OnChatSelectionChanged.Broadcast(SelectedItem);
+}
+
 void UChatBoxWidget::HandleTextEnter()
 {
+	if (!TextBox)
+	{
+		ReturnFocus();
+		return;
+	}
+
 	FString InputString = TextBox->GetText().ToString();
 
 	if (InputString.IsEmpty())
@@ -18,6 +39,11 @@ void UChatBoxWidget::HandleTextEnter()
 	TextBox->SetText(FText::GetEmpty());
 
 	IPlayerChatInterface* PlayerChatInterface = Cast<IPlayerChatInterface>(GetOwningPlayer());
+	if (!PlayerChatInterface)
+	{
+		ReturnFocus();
+		return;
+	}
 
 	if (InputString[0] == ServerCommandTriggerCharacter)
 	{
@@ -84,6 +110,12 @@ void UChatBoxWidget::HandleTextEnter()
 		return;
 	}
 
+	if (!ChatSelection)
+	{
+		ReturnFocus();
+		return;
+	}
+
 	if (const FString SelectedOption = ChatSelection->GetSelectedOption(); SelectedOption == "Say")
 	{
 		PlayerChatInterface->AreaSpeak(InputString, 1500.f);
@@ -120,12 +152,33 @@ void UChatBoxWidget::ReturnFocus()
 	OnReleaseFocusRequired.Broadcast();
 }
 
+void UChatBoxWidget::SubmitCurrentText()
+{
+	HandleTextEnter();
+}
+
 bool UChatBoxWidget::HasFocus() const
 {
-	return TextBox->HasUserFocus(GetOwningPlayer());
+	return TextBox && TextBox->HasUserFocus(GetOwningPlayer());
 }
 
 void UChatBoxWidget::SetChatFocus()
 {
-	TextBox->SetFocus();
+	if (TextBox)
+	{
+		TextBox->SetFocus();
+	}
+}
+
+FString UChatBoxWidget::GetSelectedChatOption() const
+{
+	return ChatSelection ? ChatSelection->GetSelectedOption() : FString();
+}
+
+void UChatBoxWidget::SetSelectedChatOption(const FString& Option)
+{
+	if (ChatSelection && !Option.IsEmpty())
+	{
+		ChatSelection->SetSelectedOption(Option);
+	}
 }
