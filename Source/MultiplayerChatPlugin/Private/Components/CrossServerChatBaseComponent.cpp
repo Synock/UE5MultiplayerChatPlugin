@@ -195,7 +195,7 @@ void UCrossServerChatBaseComponent::ReplyError(const FHttpResultCallback& OnComp
 void UCrossServerChatBaseComponent::ReplyOK(const FHttpResultCallback& OnComplete)
 {
 	TUniquePtr<FHttpServerResponse> Response = FHttpServerResponse::Create(
-		TEXT("{\"status\":\"ok\"}"), TEXT("application/json"));
+		FString(TEXT("{\"status\":\"ok\"}")), TEXT("application/json"));
 	Response->Code = EHttpServerResponseCodes::Ok;
 	OnComplete(MoveTemp(Response));
 }
