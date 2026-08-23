@@ -15,20 +15,36 @@ void ConstantTextManager::InitializeTextMap(const FString& EditorStringListFileP
 
 	if (DataTable)
 	{
-		TArray<FConstantStringRow*> Rows;
-		DataTable->GetAllRows(ContextString, Rows);
-
-		for (FConstantStringRow* Row : Rows)
-		{
-			if (Row)
-			{
-				TextMap.Add(Row->ID, Row->Text);
-			}
-		}
+		InitializeTextMap(DataTable);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to load Data Table"));
+		UE_LOG(LogTemp, Warning, TEXT("Failed to load Data Table at '%s' — constant chat messages will be empty. "
+			"Ensure the asset is cooked (add a UPROPERTY reference or DirectoriesToAlwaysCook)."),
+			*EditorStringListFilePath);
+	}
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+void ConstantTextManager::InitializeTextMap(UDataTable* DataTable)
+{
+	static const FString ContextString(TEXT("MyTextTableContext"));
+	if (!DataTable)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ConstantTextManager::InitializeTextMap called with null DataTable"));
+		return;
+	}
+
+	TArray<FConstantStringRow*> Rows;
+	DataTable->GetAllRows(ContextString, Rows);
+
+	for (FConstantStringRow* Row : Rows)
+	{
+		if (Row)
+		{
+			TextMap.Add(Row->ID, Row->Text);
+		}
 	}
 }
 

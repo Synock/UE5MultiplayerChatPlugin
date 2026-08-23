@@ -10,6 +10,9 @@ public:
 
 	static void InitializeTextMap(const FString& EditorStringListFilePath = {"/Game/ConstantStrings.ConstantStrings"});
 
+	/** Populate the map directly from an already-loaded DataTable (preferred in packaged builds). */
+	static void InitializeTextMap(UDataTable* DataTable);
+
 private:
 	static TMap<int32, FText> TextMap;
 };
