@@ -13,23 +13,33 @@
 void IGameModeChatInterface::AreaSpeak(APlayerController* PlayerController, const FString& Message, float Range)
 {
 	AGameModeBase* GameMode = Cast<AGameModeBase>(this);
-	check(GameMode)
+	if (!IsValid(GameMode) || !GameMode->GetWorld() || !IsValid(PlayerController))
+		return;
 
 	IPlayerChatInterface* OriginalSpeaker = Cast<IPlayerChatInterface>(PlayerController);
 	if (!OriginalSpeaker)
 		return;
 
+	// Dead players can keep their controller after their pawn has been destroyed.
+	APawn* SpeakerPawn = PlayerController->GetPawn();
+	if (!IsValid(SpeakerPawn))
+		return;
+
+	const FVector SpeakerLocation = SpeakerPawn->GetActorLocation();
 	const TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes{{EObjectTypeQuery::ObjectTypeQuery3}};
-	const TArray<AActor*> ActorsToIgnore{PlayerController->GetPawn()};
+	const TArray<AActor*> ActorsToIgnore{SpeakerPawn};
 	TArray<AActor*> ActorArray;
 	const bool OverlapStatus = UKismetSystemLibrary::SphereOverlapActors(
-		GameMode->GetWorld(), PlayerController->GetPawn()->GetActorLocation(), Range,
+		GameMode->GetWorld(), SpeakerLocation, Range,
 		ObjectTypes, nullptr,
 		ActorsToIgnore, ActorArray);
 
-	UKismetSystemLibrary::DrawDebugSphere(GameMode->GetWorld(), PlayerController->GetPawn()->GetActorLocation(), Range,
-	                                      8,
-	                                      OverlapStatus ? FColor::Green : FColor::Red, 3.f, 0.f);
+	if (GameMode->GetWorld()->IsPlayInEditor())
+	{
+		UKismetSystemLibrary::DrawDebugSphere(GameMode->GetWorld(), SpeakerLocation, Range,
+		                                      8,
+		                                      OverlapStatus ? FColor::Green : FColor::Red, 3.f, 0.f);
+	}
 
 	const FString FinalMessage = OriginalSpeaker->GetChatName() + " says, '" + Message + "'";
 	for (auto& Actor : ActorArray)
@@ -312,9 +322,12 @@ void IGameModeChatInterface::AreaLog(EGlobalMessageType MessageType, const FStri
 		ObjectTypes, nullptr,
 		ActorsToIgnore, ActorArray);
 
-	UKismetSystemLibrary::DrawDebugSphere(GameMode->GetWorld(), Origin, Range,
-	                                      8,
-	                                      OverlapStatus ? FColor::Green : FColor::Red, 3.f, 0.f);
+	if (GameMode->GetWorld()->IsPlayInEditor())
+	{
+		UKismetSystemLibrary::DrawDebugSphere(GameMode->GetWorld(), Origin, Range,
+		                                      8,
+		                                      OverlapStatus ? FColor::Green : FColor::Red, 3.f, 0.f);
+	}
 
 	for (auto& Actor : ActorArray)
 	{
@@ -345,9 +358,12 @@ void IGameModeChatInterface::AreaLogAroundPlayer(APlayerController* PlayerContro
 		ObjectTypes, nullptr,
 		ActorsToIgnore, ActorArray);
 
-	UKismetSystemLibrary::DrawDebugSphere(GameMode->GetWorld(), PlayerController->GetPawn()->GetActorLocation(), Range,
-										  8,
-										  OverlapStatus ? FColor::Green : FColor::Red, 3.f, 0.f);
+	if (GameMode->GetWorld()->IsPlayInEditor())
+	{
+		UKismetSystemLibrary::DrawDebugSphere(GameMode->GetWorld(), PlayerController->GetPawn()->GetActorLocation(), Range,
+											  8,
+											  OverlapStatus ? FColor::Green : FColor::Red, 3.f, 0.f);
+	}
 
 	for (auto& Actor : ActorArray)
 	{
@@ -377,9 +393,12 @@ void IGameModeChatInterface::AreaConstantLogAroundPlayer(APlayerController* Play
 		ObjectTypes, nullptr,
 		ActorsToIgnore, ActorArray);
 
-	UKismetSystemLibrary::DrawDebugSphere(GameMode->GetWorld(), PlayerController->GetPawn()->GetActorLocation(), Range,
-										  8,
-										  OverlapStatus ? FColor::Green : FColor::Red, 3.f, 0.f);
+	if (GameMode->GetWorld()->IsPlayInEditor())
+	{
+		UKismetSystemLibrary::DrawDebugSphere(GameMode->GetWorld(), PlayerController->GetPawn()->GetActorLocation(), Range,
+											  8,
+											  OverlapStatus ? FColor::Green : FColor::Red, 3.f, 0.f);
+	}
 
 	for (auto& Actor : ActorArray)
 	{
@@ -410,9 +429,12 @@ void IGameModeChatInterface::AreaConstantLog(EChatColor Color, EMessageCategorie
 		ObjectTypes, nullptr,
 		ActorsToIgnore, ActorArray);
 
-	UKismetSystemLibrary::DrawDebugSphere(GameMode->GetWorld(), Origin, Range,
-										  8,
-										  OverlapStatus ? FColor::Green : FColor::Red, 3.f, 0.f);
+	if (GameMode->GetWorld()->IsPlayInEditor())
+	{
+		UKismetSystemLibrary::DrawDebugSphere(GameMode->GetWorld(), Origin, Range,
+											  8,
+											  OverlapStatus ? FColor::Green : FColor::Red, 3.f, 0.f);
+	}
 
 	for (auto& Actor : ActorArray)
 	{
